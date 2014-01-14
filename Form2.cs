@@ -49,15 +49,30 @@ namespace managment
 			
 			DateTimePicker dateStart = (DateTimePicker) dateTimePicker1;
 			DateTimePicker dateEnd = (DateTimePicker) dateTimePicker2;
-			
-			MessageBox.Show(dateStart.Value.ToString());
+
+            //MessageBox.Show(dateStart.Value.ToString("yyyy-MM-dd H:m:s"));
 			
 			Dictionary<string, string> data = new Dictionary<string, string>();
+
+ 
+            Mysql mysql = new Mysql();
+
+            data.Add("name", name.Text);
+            data.Add("organization_name", organization.Text);
+            if (type.SelectedIndex > -1)
+            {
+                int type_id = mysql.GetType(type.SelectedItem.ToString());
+                data.Add("type", type_id.ToString());
+            }
+            data.Add("date_start", dateStart.Value.ToString("yyyy-MM-dd H:m:s"));
+            data.Add("date_end", dateEnd.Value.ToString("yyyy-MM-dd H:m:s"));
 			
-			//data.
-			
-			//Mysql mysql = new Mysql();
-			//mysql.Set("contract", data);
+			mysql.Set("contracts", data);
+            
+            this.Close();
+            MessageBox.Show("Договор добавлен");
+
+ 
 		}
 	}
 }
