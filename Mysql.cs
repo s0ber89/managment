@@ -24,7 +24,7 @@ namespace managment
 		
 		public Mysql()
 		{
-			string Connect="Database=sarnii;Data Source=sarnii.ru;User Id=sarnii;Password=Dominator13;charset=utf8;";
+			string Connect="Database=sarnii;Data Source=sarnii.ru;User Id=sarnii;Password=***;charset=utf8;";
 			myConnection = new MySqlConnection(Connect);
 		}
 		
@@ -61,72 +61,6 @@ namespace managment
 			}
 			return result;
 		}
-
-        public int GetType(string name)
-        {
-            string CommandText = "SELECT id FROM contract_type WHERE title='" + name + "'";
-            MySqlCommand command = new MySqlCommand(CommandText, myConnection);
-
-            var result = new Dictionary<int, Dictionary<string, string>>();
-
-            MySqlDataReader reader;
-            try
-            {
-                command.Connection.Open();
-                reader = command.ExecuteReader();
-                int i = 0;
-                while (reader.Read())
-                {
-                    var field = new Dictionary<string, string>();
-                    for (int y = 0; y < reader.FieldCount; y++)
-                    {
-                        field[reader.GetName(y).ToString()] = reader[y].ToString();
-                    }
-
-                    result[i] = field;
-                    i++;
-                }
-                reader.Close();
-            }
-            finally
-            {
-                myConnection.Close();
-            }
-            return Convert.ToInt32(result[0]["id"]);
-        }
-        
-        public Dictionary<int, Dictionary<string, string>> GetDate(string date)
-        {
-            string CommandText = "SELECT * FROM contracts WHERE date_end < '" + date + "'";
-            MySqlCommand command = new MySqlCommand(CommandText, myConnection);
-
-            var result = new Dictionary<int, Dictionary<string, string>>();
-
-            MySqlDataReader reader;
-            try
-            {
-                command.Connection.Open();
-                reader = command.ExecuteReader();
-                int i = 0;
-                while (reader.Read())
-                {
-                    var field = new Dictionary<string, string>();
-                    for (int y = 0; y < reader.FieldCount; y++)
-                    {
-                        field[reader.GetName(y).ToString()] = reader[y].ToString();
-                    }
-
-                    result[i] = field;
-                    i++;
-                }
-                reader.Close();
-            }
-            finally
-            {
-                myConnection.Close();
-            }
-            return result;
-        }
 		
 		public void Set(string table, Dictionary<string, string> data, int id = 0)
 		{
@@ -146,22 +80,6 @@ namespace managment
 					cmd.Parameters.AddWithValue("@"+item.Key, item.Value);			
 				}
 				//MessageBox.Show(cmd.Parameters.ToString());
-				cmd.ExecuteNonQuery();
-			}
-			finally
-			{
-				myConnection.Close();
-			}
-		}
-		
-		public  void Delete(string id)
-		{
-			string commandText = "DELETE FROM contracts WHERE id = " + id;
-			MySqlCommand cmd = new MySqlCommand(commandText, myConnection);
-			
-			try
-			{
-				cmd.Connection.Open();
 				cmd.ExecuteNonQuery();
 			}
 			finally
